@@ -55,6 +55,11 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t task-management-api:${{ github.sha }} .
+      - name: Debug GitHub OIDC context
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Branch: $GITHUB_REF"
+          echo "Event: $GITHUB_EVENT_NAME"
 
       # AWS authentication only for pushes, never pull requests
       - name: Configure AWS credentials using OIDC
@@ -63,11 +68,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-      - name: Debug GitHub OIDC context
-        run: |
-          echo "Repository: $GITHUB_REPOSITORY"
-          echo "Branch: $GITHUB_REF"
-          echo "Event: $GITHUB_EVENT_NAME"
+      
       
 
       - name: Login to Amazon ECR
